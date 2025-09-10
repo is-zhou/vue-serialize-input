@@ -1,16 +1,28 @@
 {
   "name": "vue-serialize-textarea",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.0.1",
+  "description": "A Vue3 textarea component that supports serialize & deserialize of objects, arrays, regex, and functions.",
+  "main": "dist/vue-serialize-textarea.umd.js",
+  "module": "dist/vue-serialize-textarea.es.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "vite"
+    "dev": "vite",
+    "build": "vite build"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "vue3",
+    "component",
+    "serialize",
+    "deserialize",
+    "textarea"
+  ],
+  "author": "zhouzhou",
   "license": "ISC",
   "packageManager": "pnpm@10.13.1",
+  "peerDependencies": {
+    "vue": "^3.5.21"
+  },
   "dependencies": {
     "javascript-stringify": "^2.1.0",
     "vue": "^3.5.21"
