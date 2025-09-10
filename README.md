@@ -10,14 +10,22 @@ npm install vue-serialize-textarea
 
 ## 🚀 Usage
 
+### 全局导入
+
 ```ts
 import { createApp } from "vue";
 import App from "./App.vue";
 import VueSerializeText from "vue-serialize-textarea";
 
 const app = createApp(App);
-app.use(VueSerializeInput);
+app.use(VueSerializeText);
 app.mount("#app");
+```
+
+### 按需导入
+
+```ts
+import { SerializeTextarea } from "vue-serialize-textarea";
 ```
 
 ```vue
