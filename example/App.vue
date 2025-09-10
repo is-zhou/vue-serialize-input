@@ -1,6 +1,16 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from "vue";
+
+const data = ref({
+  foo: "bar",
+  regex: /abc/gi,
+  func: (x: number) => x * 2,
+  arr: [1, 2, 3],
+});
+</script>
 
 <template>
   <h1>SerializeTextarea 组件调试</h1>
-  <SerializeTextarea />
+  <SerializeTextarea v-model="data" :unsafe="true" />
+  <pre>{{ data }}</pre>
 </template>

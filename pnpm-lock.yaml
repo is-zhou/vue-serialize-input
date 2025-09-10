@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      javascript-stringify:
+        specifier: ^2.1.0
+        version: 2.1.0
       vue:
         specifier: ^3.5.21
         version: 3.5.21(typescript@5.9.2)
@@ -555,6 +558,9 @@ packages:
   is-core-module@2.16.1:
     resolution: {integrity: sha512-UfoeMA6fIJ8wTYFEUjelnaGI67v6+N7qXJEvQuIGa99l4xsCruSYOVSQ0uPANn4dAzm8lkYPaKLrrijLq7x23w==}
     engines: {node: '>= 0.4'}
+
+  javascript-stringify@2.1.0:
+    resolution: {integrity: sha512-JVAfqNPTvNq3sB/VHQJAFxN/sPgKnsKrCwyRt15zwNCdrMMJDdcEOdubuy+DuJYYdm0ox1J4uzEuYKkN+9yhVg==}
 
   jju@1.4.0:
     resolution: {integrity: sha512-8wb9Yw966OSxApiCt0K3yNJL8pnNeIv+OEq2YMidz4FKP6nonSRoOXc80iXY4JaN2FC11B9qsNmDsm+ZOfMROA==}
@@ -1231,6 +1237,8 @@ snapshots:
   is-core-module@2.16.1:
     dependencies:
       hasown: 2.0.2
+
+  javascript-stringify@2.1.0: {}
 
   jju@1.4.0: {}
 
