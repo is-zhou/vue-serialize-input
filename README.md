@@ -1,16 +1,24 @@
-# vue-serialize-textarea
+<h1 align="center">vue-serialize-textarea</h1>
 
-A Vue3 input component that supports **serialize & deserialize** of objects, arrays, regex, and functions.
+<h3 align="center">A Vue3 input component that supports <b>serialize & deserialize</b> of objects, arrays, regex, and functions.</h3>
+
+<div align="center">
+
+![npm](https://img.shields.io/npm/v/vue-serialize-textarea?style=flat-square)
+![npm](https://img.shields.io/npm/dt/vue-serialize-textarea?style=flat-square)
+![NPM](https://img.shields.io/npm/l/vue-serialize-textarea?style=flat-square)
+
+</div>
 
 ## 🚀 Install
 
 ```bash
-npm install vue-serialize-textarea
+pnpm install vue-serialize-textarea
 ```
 
 ## 🚀 Usage
 
-### 全局导入
+### Global Import
 
 ```ts
 import { createApp } from "vue";
@@ -22,7 +30,7 @@ app.use(VueSerializeText);
 app.mount("#app");
 ```
 
-### 按需导入
+### Manually import
 
 ```ts
 import { SerializeTextarea } from "vue-serialize-textarea";
