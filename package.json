@@ -1,6 +1,6 @@
 {
   "name": "vue-serialize-textarea",
-  "version": "0.0.5",
+  "version": "0.0.9",
   "description": "A Vue3 textarea component that supports serialize & deserialize of objects, arrays, regex, and functions.",
   "main": "dist/vue-serialize-textarea.umd.js",
   "module": "dist/vue-serialize-textarea.es.js",
@@ -21,8 +21,13 @@
     "deserialize",
     "textarea"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/is-zhou/vue-serialize-textarea.git"
+  },
+  "homepage": "https://github.com/is-zhou/vue-serialize-textarea#readme",
   "author": "zhouzhou",
-  "license": "ISC",
+  "license": "MIT",
   "packageManager": "pnpm@10.13.1",
   "peerDependencies": {
     "vue": "^3.5.21"
