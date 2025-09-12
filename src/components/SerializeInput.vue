@@ -170,18 +170,15 @@ const onMouseleave = (event: MouseEvent) => {
       :placeholder="placeholder"
       v-bind="$attrs"
     />
-    <span class="errMsg" v-if="message">{{ message }}</span>
+    <div class="errMsg" v-if="message">{{ message }}</div>
   </div>
 </template>
 
 <style scoped>
 .serialize-input {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.5rem;
+  width: 100%;
 }
-.errMsg {
+.serialize-input .errMsg {
   font-size: 12px;
   color: var(--el-color-danger);
 }

@@ -52,7 +52,8 @@ export default defineConfig(({ command }: { command: 'serve' | 'build'; mode: st
                         'element-plus': 'ElementPlus'
                     }
                 }
-            }
+            },
+            cssCodeSplit: true,
         }
     }
 })
