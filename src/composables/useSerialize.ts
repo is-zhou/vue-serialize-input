@@ -1,4 +1,5 @@
 import { stringify } from "javascript-stringify"
+import { ToString } from "javascript-stringify/dist/types"
 
 export interface SerializeOptions {
     /**
@@ -6,10 +7,18 @@ export interface SerializeOptions {
      * - 如果 false，则会过滤掉函数，正则转为字符串
      */
     unsafe?: boolean
+    replacer?: ToString | null | undefined
+    space?: number
+    options?: {
+        maxDepth: number
+        maxValues: number
+        references: boolean
+        skipUndefinedProperties: boolean
+    }
 }
 
 export interface UseSerialize {
-    serialize: (value: unknown, options?: SerializeOptions) => string
+    serialize: (value: unknown, options?: SerializeOptions) => string | undefined
     deserialize: <T = unknown>(str: string, options?: SerializeOptions) => T
 }
 
@@ -21,19 +30,17 @@ export function useSerialize(): UseSerialize {
     /**
      * 序列化
      */
-    function serialize(value: unknown, options: SerializeOptions = {}): string {
-        const { unsafe = true, ...rest } = options
+    function serialize(value: unknown, serializeOptions: SerializeOptions = {}): string | undefined {
+        const { unsafe = true, replacer = null, space = 2, options = undefined } = serializeOptions
 
         if (!unsafe) {
-            // 过滤函数
             value = JSON.parse(JSON.stringify(value, (_, v) => {
                 if (typeof v === "function") return undefined
                 if (v instanceof RegExp) return v.toString()
                 return v
             }))
         }
-
-        return stringify(value) || ""
+        return stringify(value, replacer, space, options)
     }
 
     /**
@@ -41,8 +48,8 @@ export function useSerialize(): UseSerialize {
      * - unsafe 模式下，允许函数/正则等被还原（使用 new Function）
      * - safe 模式下，只支持 JSON 安全值（Object, Array, String, Number 等）
      */
-    function deserialize<T = unknown>(str: string, options: SerializeOptions = {}): T {
-        const { unsafe = true } = options
+    function deserialize<T = unknown>(str: string, serializeOptions: SerializeOptions = {}): T {
+        const { unsafe = true } = serializeOptions
 
         if (!unsafe) {
             // 安全模式 → 只用 JSON.parse

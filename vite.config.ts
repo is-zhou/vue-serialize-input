@@ -10,7 +10,15 @@ export default defineConfig(({ command }: { command: 'serve' | 'build'; mode: st
     if (command === 'serve') {
         return {
             root: path.resolve(__dirname, 'example'),
-            plugins: [vue()],
+            plugins: [
+                vue(),
+                AutoImport({
+                    resolvers: [ElementPlusResolver()],
+                }),
+                Components({
+                    resolvers: [ElementPlusResolver()],
+                }),
+            ],
             resolve: {
                 alias: {
                     '@': path.resolve(__dirname, 'src')
