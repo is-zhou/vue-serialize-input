@@ -10,7 +10,7 @@ const data = ref({
 </script>
 
 <template>
-  <h1>SerializeTextarea 组件调试</h1>
-  <SerializeTextarea v-model="data" :unsafe="true" />
+  <h1>SerializeInput 组件调试</h1>
+  <SerializeInput v-model="data" :unsafe="true" />
   <pre>{{ data }}</pre>
 </template>
