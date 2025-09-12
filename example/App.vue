@@ -11,6 +11,11 @@ const data = ref({
 
 <template>
   <h1>SerializeInput 组件调试</h1>
-  <SerializeInput v-model="data" clearable autosize />
+  <SerializeInput
+    v-model="data"
+    clearable
+    autosize
+    :serializeType="['array', 'boolean','number']"
+  />
   <pre>{{ data }}</pre>
 </template>

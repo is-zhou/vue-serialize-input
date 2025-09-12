@@ -19,7 +19,9 @@
     "component",
     "serialize",
     "deserialize",
-    "textarea"
+    "textarea",
+    "input",
+    "element-plus"
   ],
   "repository": {
     "type": "git",

@@ -2,6 +2,16 @@
 import { computed, ref, useAttrs, watch } from "vue";
 import { SerializeOptions, useSerialize } from "../composables/useSerialize";
 
+export type SerializeType =
+  | "boolean"
+  | "number"
+  | "undefined"
+  | "string"
+  | "object"
+  | "function"
+  | "array"
+  | "regex";
+
 const modelValue = defineModel<unknown>();
 
 const {
@@ -10,12 +20,14 @@ const {
   type = "textarea",
   serializeOptions,
   autosize,
+  serializeType = [],
 } = defineProps<{
   trigger?: "blur" | "change" | "mouseleave";
   placeholder?: string;
   type?: "text" | "textarea" | "number";
   autosize?: boolean | { minRows?: number; maxRows?: number };
   serializeOptions?: SerializeOptions;
+  serializeType?: SerializeType | Array<SerializeType>;
 }>();
 
 const emit = defineEmits<{
@@ -52,6 +64,9 @@ const _autosize = computed(() => {
 function handleSerialize() {
   try {
     message.value = "";
+
+    verifySerializeTypes(modelValue.value);
+
     const serializedStr = serialize(modelValue.value, serializeOptions);
     inputText.value = serializedStr;
     emit("onSerialized", serializedStr);
@@ -68,11 +83,56 @@ function handleDeserialize() {
       ? deserialize(inputText.value, serializeOptions)
       : undefined;
 
-    modelValue.value = obj;
-    emit("onDeserialized", obj);
+    const result = verifySerializeTypes(obj);
+
+    if (result) {
+      modelValue.value = obj;
+      emit("onDeserialized", obj);
+    }
   } catch (err) {
     message.value = `Error: ${(err as Error).message}`;
   }
+}
+
+function verifySerializeTypes(value: unknown): boolean {
+  if (typeof serializeType === "string") {
+    const type = getTargetByTypeof(value);
+    const result = serializeType === type;
+    if (result) {
+      return true;
+    }
+    message.value = `Error: ${type}不是期望的类型${serializeType}`;
+    return false;
+  }
+
+  if (Array.isArray(serializeType) && serializeType.length) {
+    const type = getTargetByTypeof(value);
+    const result = serializeType.includes(type);
+
+    if (result) {
+      return true;
+    }
+    message.value = `Error: ${type}不在期望的类型${serializeType.join(
+      ","
+    )}之中`;
+    return false;
+  }
+
+  return true;
+}
+
+function getTargetByTypeof(value: unknown): SerializeType {
+  let type = typeof value;
+
+  if (type === "object" && Array.isArray(value)) {
+    return "array";
+  }
+
+  if (value instanceof RegExp) {
+    return "regex";
+  }
+
+  return type as SerializeType;
 }
 
 const onChange = (val: string) => {
