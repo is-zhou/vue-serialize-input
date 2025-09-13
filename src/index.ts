@@ -1,5 +1,6 @@
 import type { App } from 'vue'
 import SerializeInput from './components/SerializeInput.vue'
+import { useSerialize } from './composables/useSerialize'
 
 // 插件安装方法
 const install = (app: App): void => {
@@ -10,6 +11,5 @@ const install = (app: App): void => {
 export default {
     install
 }
-
 // 支持按需导入
-export { SerializeInput }
+export { SerializeInput, useSerialize }

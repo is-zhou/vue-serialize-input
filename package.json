@@ -1,6 +1,6 @@
 {
   "name": "vue-serialize-input",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "A Vue3 textarea component that supports serialize & deserialize of objects, arrays, regex, and functions.",
   "main": "dist/vue-serialize-input.umd.js",
   "module": "dist/vue-serialize-input.es.js",
