@@ -51,7 +51,7 @@ watch(
   () => {
     handleSerialize();
   },
-  { immediate: true }
+  { immediate: true, deep: true }
 );
 
 const _autosize = computed(() => {
