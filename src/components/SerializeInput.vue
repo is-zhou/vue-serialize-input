@@ -16,7 +16,7 @@ const modelValue = defineModel<unknown>();
 
 const {
   trigger = "blur",
-  placeholder = "输入对象/数组/正则/函数字符串",
+  placeholder,
   type = "textarea",
   serializeOptions,
   autosize,
@@ -45,6 +45,24 @@ const inputRef = ref<HTMLTextAreaElement>();
 
 const inputText = ref<string | undefined>("");
 const message = ref("");
+
+const _placeholder = computed(() => {
+  let text = "请输入输入对象/数组/正则/函数字符串";
+
+  if (Array.isArray(serializeType)) {
+    text = serializeType.reduce((pre, current, index) => {
+      return (pre += `${current}${
+        serializeType.length - 1 === index ? "等值" : "、"
+      }`);
+    }, "请输入");
+  }
+
+  if (typeof serializeType === "string") {
+    text = `请输入${serializeType}`;
+  }
+
+  return placeholder || text;
+});
 
 watch(
   () => modelValue.value,
@@ -167,7 +185,7 @@ const onMouseleave = (event: MouseEvent) => {
       @change="onChange"
       @mouseleave="onMouseleave"
       ref="inputRef"
-      :placeholder="placeholder"
+      :placeholder="_placeholder"
       v-bind="$attrs"
     />
     <div class="errMsg" v-if="message">{{ message }}</div>
