@@ -67,7 +67,9 @@ const _placeholder = computed(() => {
 watch(
   () => modelValue.value,
   () => {
-    handleSerialize();
+    if (modelValue.value) {
+      handleSerialize();
+    }
   },
   { immediate: true, deep: true }
 );

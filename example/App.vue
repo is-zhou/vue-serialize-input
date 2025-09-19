@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-const data = ref({
-  foo: "bar",
-  regex: /abc/gi,
-  func: (x: number) => x * 666,
-  arr: [1, 2, 3],
-});
+const data = ref();
 </script>
 
 <template>
@@ -15,7 +10,7 @@ const data = ref({
     v-model="data"
     clearable
     autosize
-    :serializeType="['array', 'boolean','number']"
+    :serializeType="['array', 'boolean', 'string']"
   />
   <pre>{{ data }}</pre>
 </template>
