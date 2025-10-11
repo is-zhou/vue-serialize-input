@@ -60,20 +60,22 @@ const _autosize = computed(() => {
 watch(
   () => modelValue.value,
   () => {
-    if (modelValue.value) {
-      handleSerialize();
-    }
+    handleSerialize();
   },
   { immediate: true, deep: true }
 );
 //序列化成字符串
 function handleSerialize() {
   try {
-    message.value = verifySerializeTypes(modelValue.value, serializeType);
+    message.value = "";
+    inputText.value = "";
+    if (modelValue.value) {
+      message.value = verifySerializeTypes(modelValue.value, serializeType);
 
-    const serializedStr = serialize(modelValue.value, serializeOptions);
-    inputText.value = serializedStr;
-    emits("onSerialized", serializedStr);
+      const serializedStr = serialize(modelValue.value, serializeOptions);
+      inputText.value = serializedStr;
+      emits("onSerialized", serializedStr);
+    }
   } catch (err) {
     message.value = `Error: ${(err as Error).message}`;
   }
@@ -81,6 +83,10 @@ function handleSerialize() {
 //反序列化成目标类型
 function handleDeserialize() {
   try {
+    if (inputText.value === "") {
+      return;
+    }
+
     let obj = inputText.value
       ? deserialize(inputText.value, serializeOptions)
       : undefined;
@@ -93,7 +99,12 @@ function handleDeserialize() {
       emits("onDeserialized", obj);
     }
   } catch (err) {
-    message.value = `Error: ${(err as Error).message}`;
+    if (serializeType.includes("string")) {
+      modelValue.value = inputText.value;
+      emits("onDeserialized", inputText.value);
+    } else {
+      message.value = `Error: ${(err as Error).message}`;
+    }
   }
 }
 </script>
@@ -111,7 +122,10 @@ function handleDeserialize() {
       :placeholder="_placeholder"
       v-bind="$attrs"
     />
-    <div class="errMsg" v-if="message">{{ message }}</div>
+    <div class="errMsg" v-if="message">
+      {{ message }} &nbsp;&nbsp;
+      <span @click="handleSerialize()" style="cursor: pointer">[重置]</span>
+    </div>
   </div>
 </template>
 
