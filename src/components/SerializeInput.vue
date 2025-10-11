@@ -1,16 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, useAttrs, watch } from "vue";
-import { SerializeOptions, useSerialize } from "../composables/useSerialize";
-
-export type SerializeType =
-  | "boolean"
-  | "number"
-  | "undefined"
-  | "string"
-  | "object"
-  | "function"
-  | "array"
-  | "regex";
+import { useSerialize } from "../composables/useSerialize";
+import { verifySerializeTypes } from "../utils";
+import { SerializeInputEmits, SerializeInputProps } from "../types";
+import { useTrigger } from "../composables/useTrigger";
 
 const modelValue = defineModel<unknown>();
 
@@ -21,30 +14,24 @@ const {
   serializeOptions,
   autosize,
   serializeType = [],
-} = defineProps<{
-  trigger?: "blur" | "change" | "mouseleave";
-  placeholder?: string;
-  type?: "text" | "textarea" | "number";
-  autosize?: boolean | { minRows?: number; maxRows?: number };
-  serializeOptions?: SerializeOptions;
-  serializeType?: SerializeType | Array<SerializeType>;
-}>();
+} = defineProps<SerializeInputProps>();
 
-const emit = defineEmits<{
-  (e: "onSerialized", value: string | undefined): void;
-  (e: "onDeserialized", value: unknown): void;
-  (e: "blur", event: FocusEvent, value: unknown): void;
-  (e: "change", value: unknown): void;
-  (e: "mouseleave", event: MouseEvent, value: unknown): void;
-}>();
+const emits = defineEmits<SerializeInputEmits>();
 
 const $attrs = useAttrs();
+
 const { serialize, deserialize } = useSerialize();
 
 const inputRef = ref<HTMLTextAreaElement>();
 
 const inputText = ref<string | undefined>("");
-const message = ref("");
+const message = ref<string | undefined>("");
+
+const { onBlur, onChange, onMouseleave } = useTrigger(
+  trigger,
+  emits,
+  handleDeserialize
+);
 
 const _placeholder = computed(() => {
   let text = "请输入输入对象/数组/正则/函数字符串";
@@ -63,6 +50,12 @@ const _placeholder = computed(() => {
 
   return placeholder || text;
 });
+const _autosize = computed(() => {
+  if (type === "textarea" && typeof autosize === "undefined") {
+    return true;
+  }
+  return autosize;
+});
 
 watch(
   () => modelValue.value,
@@ -73,108 +66,36 @@ watch(
   },
   { immediate: true, deep: true }
 );
-
-const _autosize = computed(() => {
-  if (type === "textarea" && typeof autosize === "undefined") {
-    return true;
-  }
-  return autosize;
-});
-
+//序列化成字符串
 function handleSerialize() {
   try {
-    message.value = "";
-
-    verifySerializeTypes(modelValue.value);
+    message.value = verifySerializeTypes(modelValue.value, serializeType);
 
     const serializedStr = serialize(modelValue.value, serializeOptions);
     inputText.value = serializedStr;
-    emit("onSerialized", serializedStr);
+    emits("onSerialized", serializedStr);
   } catch (err) {
     message.value = `Error: ${(err as Error).message}`;
   }
 }
-
+//反序列化成目标类型
 function handleDeserialize() {
   try {
-    message.value = "";
-
     let obj = inputText.value
       ? deserialize(inputText.value, serializeOptions)
       : undefined;
 
-    const result = verifySerializeTypes(obj);
+    const errMsg = verifySerializeTypes(obj, serializeType);
+    message.value = errMsg;
 
-    if (result) {
+    if (!errMsg) {
       modelValue.value = obj;
-      emit("onDeserialized", obj);
+      emits("onDeserialized", obj);
     }
   } catch (err) {
     message.value = `Error: ${(err as Error).message}`;
   }
 }
-
-function verifySerializeTypes(value: unknown): boolean {
-  if (typeof serializeType === "string") {
-    const type = getTargetByTypeof(value);
-    const result = serializeType === type;
-    if (result) {
-      return true;
-    }
-    message.value = `Error: ${type}不是期望的类型${serializeType}`;
-    return false;
-  }
-
-  if (Array.isArray(serializeType) && serializeType.length) {
-    const type = getTargetByTypeof(value);
-    const result = serializeType.includes(type);
-
-    if (result) {
-      return true;
-    }
-    message.value = `Error: ${type}不在期望的类型${serializeType.join(
-      ","
-    )}之中`;
-    return false;
-  }
-
-  return true;
-}
-
-function getTargetByTypeof(value: unknown): SerializeType {
-  let type = typeof value;
-
-  if (type === "object" && Array.isArray(value)) {
-    return "array";
-  }
-
-  if (value instanceof RegExp) {
-    return "regex";
-  }
-
-  return type as SerializeType;
-}
-
-const onChange = (val: string) => {
-  emit("change", val);
-  if (trigger === "change") {
-    handleDeserialize();
-  }
-};
-
-const onBlur = (event: FocusEvent) => {
-  emit("blur", event, inputText.value);
-  if (trigger === "blur") {
-    handleDeserialize();
-  }
-};
-
-const onMouseleave = (event: MouseEvent) => {
-  emit("mouseleave", event, inputText.value);
-  if (trigger === "mouseleave") {
-    handleDeserialize();
-  }
-};
 </script>
 
 <template>

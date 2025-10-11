@@ -40,7 +40,7 @@ npm install vue-serialize-input
 import { createApp } from "vue";
 import App from "./App.vue";
 import VueSerializeInput from "vue-serialize-input";
-
+import "vue-serialize-input/dist/index.css";
 const app = createApp(App);
 app.use(VueSerializeInput);
 app.mount("#app");
@@ -91,13 +91,13 @@ function onDeserialized(obj: unknown) {
 
 ## 🎯 事件
 
-| 事件名           | 参数                                  | 说明                   |
-| ---------------- | ------------------------------------- | ---------------------- |
-| `onSerialized`   | `(value: string \| undefined)`        | 每次序列化完成时触发   |
-| `onDeserialized` | `(value: unknown)`                    | 每次反序列化完成时触发 |
-| `blur`           | `(event: FocusEvent, value: unknown)` | 输入框失焦时触发       |
-| `change`         | `(value: unknown)`                    | 输入值改变时触发       |
-| `mouseleave`     | `(event: MouseEvent, value: unknown)` | 鼠标移出时触发         |
+| 事件名           | 参数                           | 说明                   |
+| ---------------- | ------------------------------ | ---------------------- |
+| `onSerialized`   | `(value: string \| undefined)` | 每次序列化完成时触发   |
+| `onDeserialized` | `(value: unknown)`             | 每次反序列化完成时触发 |
+| `blur`           | `(event: FocusEvent)`          | 输入框失焦时触发       |
+| `change`         | `(value: unknown)`             | 输入值改变时触发       |
+| `mouseleave`     | `(event: MouseEvent)`          | 鼠标移出时触发         |
 
 ## 🛠️ 类型定义
 
